@@ -1,8 +1,14 @@
-# si en python va?
-# con PyQt6?
+from PyQt6.QtWidgets import QApplication
+import sys
+from mainwindow import MainWindow
+
+app = QApplication(sys.argv)
+win = MainWindow()
+
 
 def main():
-    pass
+    win.show()
+    app.exec()
 
 
 main()
