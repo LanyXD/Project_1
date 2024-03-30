@@ -45,7 +45,13 @@ class MainWindow(QMainWindow):
             file_location = dialog.selectedFiles()[0]
             with open(file_location, 'rb') as file:
                 text = str(file.read()).split(sep="'")[1]
-                self.label.setText(text)
+                text2 = text.split(sep='\\r\\n')
+                text3 = ''
+                for i in text2:
+                    text3 += i
+                    text3 += "\n"
+
+                self.label.setText(text3)
                 file.close()
 
     def analizar(self):
