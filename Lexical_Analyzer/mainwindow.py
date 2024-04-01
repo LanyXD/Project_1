@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QToolBar, QFileDialog, QLabel, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QMainWindow, QToolBar, QFileDialog, QVBoxLayout, QWidget, QTextEdit
 
 
 class MainWindow(QMainWindow):
@@ -8,12 +8,12 @@ class MainWindow(QMainWindow):
         self.setFixedSize(600, 500)
         self.setWindowTitle("Analizador")
 
-        # Variables para los labels
-        self.label = QLabel()
+        # Variables para el text edit
+        self.textedit = QTextEdit()
 
         # Variables para el layout
         self.main_layout = QVBoxLayout()
-        self.main_layout.addWidget(self.label)
+        self.main_layout.addWidget(self.textedit)
 
         # Variables para los widgets
         self.main_widget = QWidget()
@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
                     text3 += i
                     text3 += "\n"
 
-                self.label.setText(text3)
+                self.textedit.setText(text3)
                 file.close()
 
     def analizar(self):
