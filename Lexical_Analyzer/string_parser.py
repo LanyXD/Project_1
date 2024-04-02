@@ -81,9 +81,8 @@ class StringParcer:
                     else:
                         raise Exception("Error de parentesis.")
 
-            if self.stack.size >= 2:
-                print(self.stack.size)
-                raise Exception("Error de parentesis.")
+        if self.stack.size >= 1:
+            raise Exception("Error de parentesis.")
 
         return text_without_s
 
@@ -120,8 +119,7 @@ class StringParcer:
 # uso de la clase
 if __name__ == '__main__':
     myAnalyzer = StringParcer()
-    string = "entero hola = (15 + 191)()()"
-    string2 = "\" ( ) { } ;"
+    string = "entero hola = (15 + 191)("
 
     myAnalyzer.set_string(string)
     try:
