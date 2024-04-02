@@ -109,6 +109,13 @@ class StringParcer:
             else:
                 self.identifiers_c += 1
 
+    def resultados(self):
+        print("Palabras reservadas: ", self.reserved_w_c)
+        print("Operadores: ", self.operators_c)
+        print("Signos: ", self.sings_c)
+        print("Numeros: ", self.numbers_c)
+        print("Identificadores: ", self.identifiers_c)
+
 
 # uso de la clase
 if __name__ == '__main__':

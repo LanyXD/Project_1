@@ -1,5 +1,6 @@
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QMainWindow, QToolBar, QFileDialog, QVBoxLayout, QWidget, QTextEdit
+from string_parser import StringParcer
 
 
 class MainWindow(QMainWindow):
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
         # Boton para analizar el archivo de texto
         button_action2 = QAction("Analizar", self)
         button_action2.setStatusTip("Analiza el archivo cargado")
-        button_action1.triggered.connect(self.analizar)
+        button_action2.triggered.connect(self.analizar)
         toolbar.addAction(button_action2)
 
     def load(self):
@@ -55,4 +56,11 @@ class MainWindow(QMainWindow):
                 file.close()
 
     def analizar(self):
-        pass
+        analizador = StringParcer()
+        texto = self.textedit.toPlainText()
+        analizador.set_string(texto)
+        try:
+            analizador.analyze_text()
+            analizador.resultados()
+        except:
+            print("Cadena no aceptada.")
