@@ -8,9 +8,11 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setFixedSize(600, 500)
         self.setWindowTitle("Analizador")
+        self.text2 = []
 
         # Variables para el text edit
         self.textedit = QTextEdit()
+        self.textedit.setEnabled(False)
 
         # Variables para el layout
         self.main_layout = QVBoxLayout()
@@ -46,9 +48,9 @@ class MainWindow(QMainWindow):
             file_location = dialog.selectedFiles()[0]
             with open(file_location, 'rb') as file:
                 text = str(file.read()).split(sep="'")[1]
-                text2 = text.split(sep='\\r\\n')
+                self.text2 = text.split(sep='\\r\\n')
                 text3 = ''
-                for i in text2:
+                for i in self.text2:
                     text3 += i
                     text3 += "\n"
 
@@ -57,10 +59,7 @@ class MainWindow(QMainWindow):
 
     def analizar(self):
         analizador = StringParcer()
-        texto = self.textedit.toPlainText()
-        analizador.set_string(texto)
-        try:
+        for i in self.text2:
+            analizador.set_string(i)
             analizador.analyze_text()
-            analizador.resultados()
-        except:
-            print("Cadena no aceptada.")
+        analizador.resultados()
