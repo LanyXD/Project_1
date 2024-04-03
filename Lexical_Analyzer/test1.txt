@@ -1,2 +1,1 @@
-entero hola = (51 + 191)
-entero adios = 17
+(

@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QToolBar, QFileDialog, QVBoxLayout, QWidget, QTextEdit
+from PyQt6.QtWidgets import QMainWindow, QToolBar, QFileDialog, QVBoxLayout, QWidget, QTextEdit, QLabel
 from string_parser import StringParcer
 
 
@@ -14,9 +14,13 @@ class MainWindow(QMainWindow):
         self.textedit = QTextEdit()
         self.textedit.setEnabled(False)
 
+        # Variables para el label
+        self.label = QLabel()
+
         # Variables para el layout
         self.main_layout = QVBoxLayout()
         self.main_layout.addWidget(self.textedit)
+        self.main_layout.addWidget(self.label)
 
         # Variables para los widgets
         self.main_widget = QWidget()
@@ -58,8 +62,20 @@ class MainWindow(QMainWindow):
                 file.close()
 
     def analizar(self):
+        flag = False
+        text2 = "Cadena no aceptada."
         analizador = StringParcer()
         for i in self.text2:
             analizador.set_string(i)
-            analizador.analyze_text()
-        analizador.resultados()
+            try:
+                analizador.analyze_text()
+
+            except:
+                flag = True
+        results = analizador.resultados()
+        text = (f'Palabras reservadas: {results[0]} \n Operadores: {results[1]} \n Signos: {results[2]}'
+                f'\n Numeros: {results[3]} \n Identificadores: {results[4]}')
+        if flag is True:
+            self.label.setText(text2)
+        else:
+            self.label.setText(text)

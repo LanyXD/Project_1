@@ -109,17 +109,13 @@ class StringParcer:
                 self.identifiers_c += 1
 
     def resultados(self):
-        print("Palabras reservadas: ", self.reserved_w_c)
-        print("Operadores: ", self.operators_c)
-        print("Signos: ", self.sings_c)
-        print("Numeros: ", self.numbers_c)
-        print("Identificadores: ", self.identifiers_c)
+        return [self.reserved_w_c, self.operators_c, self.sings_c, self.numbers_c, self.identifiers_c]
 
 
 # uso de la clase
 if __name__ == '__main__':
     myAnalyzer = StringParcer()
-    string = "entero hola = (15 + 191)("
+    string = "("
 
     myAnalyzer.set_string(string)
     try:
