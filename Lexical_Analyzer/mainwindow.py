@@ -8,18 +8,16 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setFixedSize(600, 500)
         self.setWindowTitle("Analizador")
-        self.text2 = []
-
-        # Variables para el text edit
-        self.textedit = QTextEdit()
-        self.textedit.setEnabled(False)
+        self.fileText: list = []
+        self.labelList: list = []
 
         # Variables para el label
         self.label = QLabel()
+        self.label.setMinimumSize(10, 80)
+        self.label.setMaximumSize(1100, 80)
 
         # Variables para el layout
         self.main_layout = QVBoxLayout()
-        self.main_layout.addWidget(self.textedit)
         self.main_layout.addWidget(self.label)
 
         # Variables para los widgets
@@ -44,7 +42,17 @@ class MainWindow(QMainWindow):
         button_action2.triggered.connect(self.analizar)
         toolbar.addAction(button_action2)
 
+    def clean_screen(self):
+        for i in self.labelList:
+            self.main_layout.removeWidget(i)
+
+        self.label.setText('')
+        self.fileText.clear()
+        self.labelList.clear()
+
     def load(self):
+        self.clean_screen()
+
         dialog = QFileDialog()
         dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
         dialog_succesful = dialog.exec()
@@ -52,30 +60,44 @@ class MainWindow(QMainWindow):
             file_location = dialog.selectedFiles()[0]
             with open(file_location, 'rb') as file:
                 text = str(file.read()).split(sep="'")[1]
-                self.text2 = text.split(sep='\\r\\n')
-                text3 = ''
-                for i in self.text2:
-                    text3 += i
-                    text3 += "\n"
-
-                self.textedit.setText(text3)
+                self.fileText = text.split(sep='\\r\\n')
+                self.load_text()
                 file.close()
+
+    def load_text(self):
+        for text in self.fileText:
+            new_label = QLabel()
+            new_label.setText(text)
+            new_label.setMinimumSize(10, 10)
+            new_label.setMaximumSize(1100, 20)
+
+            self.labelList.append(new_label)
+            self.main_layout.addWidget(new_label)
 
     def analizar(self):
         flag = False
-        text2 = "Cadena no aceptada."
+        count = 0
+        text2 = "No aceptado."
         analizador = StringParcer()
-        for i in self.text2:
+        for i in self.fileText:
             analizador.set_string(i)
+            label: QLabel = self.labelList[count]
             try:
                 analizador.analyze_text()
-
             except:
+                label.setStyleSheet('background-color: red')
                 flag = True
+            else:
+                label.setStyleSheet('background-color: green')
+
+            count += 1
+
         results = analizador.resultados()
         text = (f'Palabras reservadas: {results[0]} \n Operadores: {results[1]} \n Signos: {results[2]}'
                 f'\n Numeros: {results[3]} \n Identificadores: {results[4]}')
+
         if flag is True:
             self.label.setText(text2)
         else:
             self.label.setText(text)
+
