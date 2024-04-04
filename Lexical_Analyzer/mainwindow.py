@@ -13,8 +13,8 @@ class MainWindow(QMainWindow):
 
         # Variables para el label
         self.label = QLabel()
-        self.label.setMinimumSize(10, 10)
-        self.label.setMaximumSize(1100, 20)
+        self.label.setMinimumSize(10, 80)
+        self.label.setMaximumSize(1100, 80)
 
         # Variables para el layout
         self.main_layout = QVBoxLayout()
