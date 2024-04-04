@@ -1,0 +1,10 @@
+tipos de errores
+operacion mal escrito
+juan +- 23
+2 === 7
+mayusculas
+HOLA SOY EL WOODY
+parentesis
+({)}
+combinaciones no descritas en el lenguaje
+siu=nou-alambre/no%se

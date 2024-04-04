@@ -1,0 +1,15 @@
+ejemplo de programa
+
+entero num1 = 15;
+entero num2 = 13;
+decimal resultado = 0;
+booleano bool1 = falso;
+
+mientras num1 < 100 hacer;
+si bool1 hacer num1 + num2; sino bool1 = verdadero
+
+resultado = num1 / num3;
+
+cadena1 = "mira mama estoy en la tele"
+cadena2 = "es media noche no juzguen lo que escribo"
+cadena3 = "awa awa"

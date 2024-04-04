@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QToolBar, QFileDialog, QVBoxLayout, QWidget, QTextEdit, QLabel
+from PyQt6.QtWidgets import QMainWindow, QToolBar, QFileDialog, QVBoxLayout, QWidget, QLabel, QMessageBox
 from string_parser import StringParcer
 
 
@@ -10,15 +10,10 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Analizador")
         self.fileText: list = []
         self.labelList: list = []
-
-        # Variables para el label
-        self.label = QLabel()
-        self.label.setMinimumSize(10, 80)
-        self.label.setMaximumSize(1100, 80)
+        self.badStrings: list = []
 
         # Variables para el layout
         self.main_layout = QVBoxLayout()
-        self.main_layout.addWidget(self.label)
 
         # Variables para los widgets
         self.main_widget = QWidget()
@@ -46,9 +41,9 @@ class MainWindow(QMainWindow):
         for i in self.labelList:
             self.main_layout.removeWidget(i)
 
-        self.label.setText('')
         self.fileText.clear()
         self.labelList.clear()
+        self.badStrings.clear()
 
     def load(self):
         self.clean_screen()
@@ -77,7 +72,7 @@ class MainWindow(QMainWindow):
     def analizar(self):
         flag = False
         count = 0
-        text2 = "No aceptado."
+
         analizador = StringParcer()
         for i in self.fileText:
             analizador.set_string(i)
@@ -86,6 +81,7 @@ class MainWindow(QMainWindow):
                 analizador.analyze_text()
             except:
                 label.setStyleSheet('background-color: red')
+                self.badStrings.append(count + 1)
                 flag = True
             else:
                 label.setStyleSheet('background-color: green')
@@ -97,7 +93,23 @@ class MainWindow(QMainWindow):
                 f'\n Numeros: {results[3]} \n Identificadores: {results[4]}')
 
         if flag is True:
-            self.label.setText(text2)
+            self.bad_message()
         else:
-            self.label.setText(text)
+            self.good_message(text)
 
+    def good_message(self, result):
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle("RESULTADO")
+        dlg.setText(result)
+        dlg.show()
+
+    def bad_message(self):
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle("CADENAS INCORRECTAS")
+        text = ''
+
+        for i in self.badStrings:
+            text += f"Error en la linea: {i}\n"
+
+        dlg.setText(text)
+        dlg.show()

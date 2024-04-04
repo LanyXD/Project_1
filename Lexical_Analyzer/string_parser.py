@@ -69,7 +69,7 @@ class StringParcer:
                 if char == "(":
                     self.stack.push("(")
                 elif char == "{":
-                    self.stack.push("(")
+                    self.stack.push("{")
                 elif char == ")":
                     if self.stack.head.data == "(":
                         self.stack.pop()
