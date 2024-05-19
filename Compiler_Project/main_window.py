@@ -18,17 +18,20 @@ class MainWindow(QMainWindow):
         super().__init__()
         # variables y banderas
         self.text: str = ""
-        self.mode: bool = False
-        self.flag: bool = True
+        self.mode_flag: bool = False
+        self.console_flag: bool = True
+
+        # contenedor
+        self.container = QWidget()
 
         # layouts
         self.main_layout: QVBoxLayout = QVBoxLayout()
         self.stack_layout: QStackedLayout = QStackedLayout()
-        self.console_layout: QTextEdit = QTextEdit()
+        self.console_layout: QTextEdit = QTextEdit("Consola: ")
 
         # layouts en stack_layout
         self.edit_layout: QTextEdit = QTextEdit()
-        self.v_layout: QVBoxLayout = QVBoxLayout()
+        self.v_layout: QVBoxLayout = QVBoxLayout(self.container)
 
         # inicializacion
         self.initialize_window()
@@ -53,13 +56,13 @@ class MainWindow(QMainWindow):
 
         # scroll area
         scroll = QScrollArea()
-        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setWidgetResizable(True)
-        scroll.setEnabled(True)
 
         # v_layout
-        scroll.setLayout(self.v_layout)
+        self.v_layout.setContentsMargins(3, 0, 0, 3)
+        scroll.setWidget(self.container)
 
         # Stack Layout
         self.stack_layout.addWidget(scroll)
@@ -109,20 +112,20 @@ class MainWindow(QMainWindow):
         self.load_text()
 
     def console(self):
-        if self.flag:
-            self.flag = False
+        if self.console_flag:
+            self.console_flag = False
             self.console_layout.close()
         else:
-            self.flag = True
+            self.console_flag = True
             self.console_layout.show()
 
     def change_mode(self):
-        if self.mode:
+        if self.mode_flag:
             self.stack_layout.setCurrentIndex(0)
-            self.mode = False
+            self.mode_flag = False
         else:
             self.stack_layout.setCurrentIndex(1)
-            self.mode = True
+            self.mode_flag = True
 
     def analyze(self):
         pass
@@ -132,8 +135,27 @@ class MainWindow(QMainWindow):
 
     # otras funciones
     def load_text(self):
+        count = 0
         for text in self.text.split("\n"):
-            new_widget = QLabel(text)
+            count += 1
+            new_widget = ObjectWidget(text, count)
             self.v_layout.addWidget(new_widget)
 
         self.edit_layout.setText(self.text)
+
+
+class ObjectWidget(QWidget):
+    def __init__(self, text: str, count: int, color: QColor | None = None):
+        super().__init__()
+        c = f"{count}.- "
+        self.text_label = QLabel(text)
+        self.count_label = QLabel(c)
+        self.count_label.setMaximumSize(20, 10)
+        self.count_label.setMinimumSize(15, 10)
+
+        self.h_layout = QHBoxLayout()
+        self.h_layout.addWidget(self.count_label)
+        self.h_layout.addWidget(self.text_label)
+
+        self.setLayout(self.h_layout)
+
