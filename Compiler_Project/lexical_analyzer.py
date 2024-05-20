@@ -51,8 +51,10 @@ class LexicalAnalyzer:
             text = self._analyze_sings()        # analiza el texto y los signos que contiene, ademas de eliminarlos.
             words = text.split(' ')
             for word in words:
+                word = word.replace("\r", "")
                 self._analyze_word(word)        # analiza el resto del texto palabras reservadas, operaciones, id y num.
         else:
+            print("cadena vacia.")
             raise Exception("Cadena vacia.")    # Error cadena vacia.
 
     # Analiza y retorna la cadena sin signos
