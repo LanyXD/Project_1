@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import \
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
 from lexical_analyzer import LexicalAnalyzer
+from syntactic_analyzer import SyntacticAnalyzer
 
 
 class MainWindow(QMainWindow):
@@ -123,15 +124,20 @@ class MainWindow(QMainWindow):
             self.mode_flag = True
 
     def analyze(self):
-        a1, analyzer = self._lexical_analyzer()
+        a1, a2, a3 = False, False, False
+
+        a1, analyzer1 = self._lexical_analyzer()
 
         if not a1:
+            a2, analyzer2 = self._syntactic_analyzer()
+
+        if not a1 and not a2 and not a3:
             self.console_text += "Sin errores lexicos, resultados: \n"
-            self.console_text += f"Palabras reservadas: {analyzer.reserved_w_c}.\n"
-            self.console_text += f"Operadores: {analyzer.operators_c}.\n"
-            self.console_text += f"Signos: {analyzer.sings_c}.\n"
-            self.console_text += f"Numeros: {analyzer.numbers_c}.\n"
-            self.console_text += f"Identificadores: {analyzer.identifiers_c}.\n"
+            self.console_text += f"Palabras reservadas: {analyzer1.reserved_w_c}.\n"
+            self.console_text += f"Operadores: {analyzer1.operators_c}.\n"
+            self.console_text += f"Signos: {analyzer1.sings_c}.\n"
+            self.console_text += f"Numeros: {analyzer1.numbers_c}.\n"
+            self.console_text += f"Identificadores: {analyzer1.identifiers_c}.\n"
 
         self.console_layout.setText(self.console_text)
 
@@ -183,7 +189,7 @@ class MainWindow(QMainWindow):
             try:
                 analyzer.analyze_text()
             except Exception:
-                error_text += f"Error lexico en la linea: {count}. \n"
+                error_text += f"Error sintactico en la linea: {count}. \n"
                 error_text += f"Error: {text}"
                 new_widget = ObjectWidget(text, f"{count}", color="white", back_color="red")
                 flag = True
@@ -196,7 +202,32 @@ class MainWindow(QMainWindow):
         return flag, analyzer
 
     def _syntactic_analyzer(self):
-        pass
+        self.cleaner()
+
+        count = 0
+        analyzer = SyntacticAnalyzer()
+        error_text = ""
+        flag = False
+
+        for text in self.text.split("\n"):
+            analyzer.set_string(text)
+            count += 1
+
+            try:
+                analyzer.choose_structure()
+            except Exception:
+                error_text += f"Error lexico en la linea: {count}. \n"
+                error_text += f"Error: {text}"
+                new_widget = ObjectWidget(text, f"{count}", color="white", back_color="red")
+                flag = True
+            else:
+                new_widget = ObjectWidget(text, f"{count}", color="white", back_color="green")
+
+            self.v_layout.addWidget(new_widget)
+
+        self.console_text += error_text
+
+        return flag, analyzer
 
     def _semantic_analyzer(self):
         pass

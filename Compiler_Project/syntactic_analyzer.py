@@ -30,8 +30,8 @@ class SyntacticAnalyzer:
             "*",
             "/",
             "%",
-            "="
         ]
+        self._equal = "="
 
         self._comparators = [
             "==",
