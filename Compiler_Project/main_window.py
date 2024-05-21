@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         # variables y banderas
-        self.text: str
+        self.text: str = ""
         self.console_text: str = "Consola: \n"
         self.mode_flag: bool = False
         self.console_flag: bool = True
@@ -124,6 +124,15 @@ class MainWindow(QMainWindow):
 
     def analyze(self):
         a1, analyzer = self._lexical_analyzer()
+
+        if not a1:
+            self.console_text += "Sin errores lexicos, resultados: \n"
+            self.console_text += f"Palabras reservadas: {analyzer.reserved_w_c}.\n"
+            self.console_text += f"Operadores: {analyzer.operators_c}.\n"
+            self.console_text += f"Signos: {analyzer.sings_c}.\n"
+            self.console_text += f"Numeros: {analyzer.numbers_c}.\n"
+            self.console_text += f"Identificadores: {analyzer.identifiers_c}.\n"
+
         self.console_layout.setText(self.console_text)
 
     def run(self):
@@ -142,11 +151,16 @@ class MainWindow(QMainWindow):
         self.edit_layout.setText(self.text)
 
     def cleaner(self):
+        # limpia la pantalla
         while self.v_layout.count():
             item = self.v_layout.takeAt(0)
             widget = item.widget()
             if widget is not None:
                 widget.deleteLater()
+
+        # limpia la consola
+        self.console_text = ""
+        self.console_layout.setText("Consola: \n")
 
     # Creador de botones
     def btn_toolbar(self, name: str, function, toolbar: QToolBar):
@@ -168,7 +182,7 @@ class MainWindow(QMainWindow):
             count += 1
             try:
                 analyzer.analyze_text()
-            except:
+            except Exception:
                 error_text += f"Error lexico en la linea: {count}. \n"
                 error_text += f"Error: {text}"
                 new_widget = ObjectWidget(text, f"{count}", color="white", back_color="red")

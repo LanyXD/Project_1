@@ -52,6 +52,20 @@ class StackList(Generic[T]):
 
         self.size = 0
 
+    def search(self, data):
+        current = self.head
+
+        while current is not None:
+            print(data)
+            print(current.data)
+            print(current.data.data)
+            if current.data == data:
+                return current
+
+            current = current.next
+
+        return None
+
     def transversal(self) -> str:
         result = ''
         current = self.head
